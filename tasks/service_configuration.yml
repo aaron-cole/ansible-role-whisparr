@@ -1,0 +1,16 @@
+---
+# tasks file for whisparr configuration
+- name: Copy Systemd whisparr template
+  template:
+    src: systemd_whisparr.service.j2
+    dest: /etc/systemd/system/whisparr.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start whisparr service
+  systemd:
+    state: started
+    enabled: yes
+    name: whisparr.service
+    daemon_reload: yes

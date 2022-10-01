@@ -1,0 +1,39 @@
+---
+# tasks file for app configuration
+
+# Setup whisparr
+- name: Download whisparr tarball
+  get_url:
+    url:  "{{ whisparr_download_url }}"
+    dest: /tmp
+  register: whisparr_tarball
+
+# Untar
+- name: Extract whisparr tarball
+  unarchive:
+    src: "{{ whisparr_tarball['dest'] }}"
+    dest: "{{ whisparr_base_install_dir }}"
+    owner: "{{ whisparr_user }}"
+    group: "{{ whisparr_group }}"
+    remote_src: yes
+
+- name: Set File perms on whisparr dir
+  file:
+    path: "{{ whisparr_base_install_dir }}/Whisparr"
+    owner: "{{ whisparr_user }}"
+    group: "{{ whisparr_group }}"
+    recurse: yes
+
+# Ensure data dir exists
+- name: Create data directory
+  file:
+    path: "{{ whisparr_config_dir }}"
+    owner: "{{ whisparr_user }}"
+    group: "{{ whisparr_group }}"
+    state: directory
+
+# Remove tarball from /tmp
+- name: Remove tarball from download
+  file:
+    path: "{{ whisparr_tarball['dest'] }}"
+    state: absent

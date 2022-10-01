@@ -1,0 +1,18 @@
+#
+# Systemd unit file for whisparr
+#
+
+[Unit]
+Description=whisparr Daemon
+
+[Service]
+Type=simple
+User={{ whisparr_user }}
+Group={{ whisparr_group }}
+ExecStart={{ whisparr_base_install_dir }}/Whisparr/Whisparr /data={{ whisparr_config_dir }}
+Restart=always
+RestartSec=15
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

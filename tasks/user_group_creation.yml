@@ -1,0 +1,24 @@
+---
+# user group tasks for whisparr
+
+# User Group Creation
+- name: Create group for whisparr if defined
+  group:
+    name: "{{ whisparr_group }}"
+    gid: "{{ whisparr_group_gid | default(omit) }}"
+    state: present
+    system: yes
+  when: whisparr_group is defined
+
+# Create our user we will use
+- name: Create whisparr user
+  user:
+    name: "{{ whisparr_user }}"
+    state: present
+    shell: /sbin/nologin
+    group: "{{ whisparr_group }}"
+    system: yes
+    home: "{{ whisparr_base_install_dir }}/Whisparr"
+    comment: "whisparr service account"
+    uid: "{{ whisparr_uid | default(omit) }}"
+    create_home: no
